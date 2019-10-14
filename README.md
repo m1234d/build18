@@ -11,5 +11,7 @@ In total there will be 6 ROS packages. Two for LIDAR, two for SLAM, one for moti
 
 ## Important Links
 ORB-SLAM2 Paper: https://arxiv.org/pdf/1610.06475.pdf
+
 ZED SLAM implementation: https://github.com/yifenghuang/ZSLAM_TX2
+
 ORB-SLAM2 code: https://github.com/raulmur/ORB_SLAM2
