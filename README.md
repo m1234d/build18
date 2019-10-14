@@ -10,9 +10,9 @@
 In total there will be 6 ROS packages. Two for LIDAR, two for SLAM, one for motion planning and one for robot control.
 
 ## Run
-Run ZED: roslaunch zed_wrapper zed.launch
+Run ZED: `roslaunch zed_wrapper zed.launch`
 
-Run ORB-SLAM2: rosrun ORB_SLAM2 RGBD src/slam/ORB_SLAM2/Vocabulary/ORBvoc.txt src/slam/ORB_SLAM2/Examples/ROS/ORB_SLAM2/zedm.yaml
+Run ORB-SLAM2: `rosrun ORB_SLAM2 RGBD src/slam/ORB_SLAM2/Vocabulary/ORBvoc.txt src/slam/ORB_SLAM2/Examples/ROS/ORB_SLAM2/zedm.yaml`
 
 ## Important Links
 ORB-SLAM2 Paper: https://arxiv.org/pdf/1610.06475.pdf
