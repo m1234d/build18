@@ -17,6 +17,7 @@ How to build rplidar ros package
 =====================================================================
     1) Clone this project to your catkin's workspace src folder
     2) Running catkin_make to build rplidarNode and rplidarNodeClient
+    https://blog.csdn.net/wilylcyu/article/details/51956599
 
 How to run rplidar ros package
 =====================================================================
