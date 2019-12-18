@@ -11,6 +11,24 @@ import cv2
 pose = None
 points = None
 pub = None
+
+def quaternion_to_euler(x, y, z, w):
+        import math
+        t0 = +2.0 * (w * x + y * z)
+        t1 = +1.0 - 2.0 * (x * x + y * y)
+        X = math.degrees(math.atan2(t0, t1))
+
+        t2 = +2.0 * (w * y - z * x)
+        t2 = +1.0 if t2 > +1.0 else t2
+        t2 = -1.0 if t2 < -1.0 else t2
+        Y = math.degrees(math.asin(t2))
+
+        t3 = +2.0 * (w * z + x * y)
+        t4 = +1.0 - 2.0 * (y * y + z * z)
+        Z = math.degrees(math.atan2(t3, t4))
+
+        return X, Y, Z
+
 def pointcloud2_to_arr(msg):
     type_list = [(f.name, np.float32) for f in msg.fields]
     arr = np.fromstring(msg.data, type_list)
@@ -25,29 +43,47 @@ def callback_points(data):
 def callback_pose(data):
     global pose
     pose = data.pose
-    print(pose)
+
+def distance(point1, point2):
+    return np.linalg.norm(point2 - point1)
 
 def publish():
     global pub
     global pose
     size = 5.0
-    step_size = .01
+    step_size = .1
     grid = np.zeros((int(size/step_size), int(size/step_size))).astype(np.uint8)
-    # small_x = min([p[0] for p in points])
-    # large_x = max([p[0] for p in points])
 
-    # small_y = min([p[1] for p in points])
-    # large_y = max([p[1] for p in points])
+    playerAngle = quaternion_to_euler(pose.orientation.x, pose.orientation.y, pose.orientation.z, pose.orientation.w)
+    playerX = int(pose.position.x/step_size)
+    playerY = int(pose.position.y/step_size)
 
-    # new_points = [()]
-    # for p in points:
+    theta = np.radians(-playerAngle[2] - 180)
+    c, s = np.cos(theta), np.sin(theta)
+    R = np.array([[c, -s], [s, c]])
+
+    pxy = R.dot(np.array([playerX, playerY]))
+    px = int(pxy[0])
+    py = int(pxy[1])
+
+    threshold = 1
     for p in points:
-        x = int(p[0] / step_size) + int(size/(2*step_size))
-        y = int(p[1] / step_size) + int(size/(2*step_size))
+        found = False
+        if p[2] < 0:
+            continue
+        x = int(p[0] / step_size)
+        y = int(p[1] / step_size)
+        pp = np.array([x, y])
+        #pp2 = R.dot(pp)
+        pp2 = pp
+
+        x = int(pp2[0]) + int(size/(2*step_size))
+        y = int(pp2[1]) + int(size/(2*step_size))
         if x >= grid.shape[0] or y >= grid.shape[1] or x < 0 or y < 0:
             continue
         grid[x, y] = 255
-    grid[int(pose.position.x/step_size) + int(size/(2*step_size)), int(pose.position.y/step_size) + int(size/(2*step_size))] = 127
+    grid[px + int(size/(2*step_size)),py + int(size/(2*step_size))] = 127
+
     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
     cv2.resizeWindow('image', 600, 600)
     cv2.imshow('image', grid)
