@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import astar as path
 import rospy
 import numpy as np
 from std_msgs.msg import String, MultiArrayLayout, UInt8MultiArray
@@ -81,7 +82,13 @@ def publish():
         y = int(pp2[1]) + int(size/(2*step_size))
         if x >= grid.shape[0] or y >= grid.shape[1] or x < 0 or y < 0:
             continue
-        grid[x, y] = 255
+        grid[x, y] = 1
+
+    p = path.a_star_search(grid, (px + int(size/(2*step_size)), py + int(size/(2*step_size)), "South"), (0, 0, "South"))
+
+    print(p)
+    
+    grid = grid*255
     grid[px + int(size/(2*step_size)),py + int(size/(2*step_size))] = 127
 
     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
