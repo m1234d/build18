@@ -1,1 +1,0 @@
-/usr/bin/cc -Wall -O2   -rdynamic CMakeFiles/fakenect-record.dir/record.c.o CMakeFiles/fakenect-record.dir/parson.c.o  -o ../bin/fakenect-record -Wl,-rpath,/home/matthew/build_ws/src/dep/libfreenect/lib: ../lib/libfreenect.so.0.6.0 -lm -lusb-1.0 

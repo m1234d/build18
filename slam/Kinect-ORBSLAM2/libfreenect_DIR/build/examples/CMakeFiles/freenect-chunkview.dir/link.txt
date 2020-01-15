@@ -1,1 +1,0 @@
-/usr/bin/cc -Wall -O2   -rdynamic CMakeFiles/freenect-chunkview.dir/chunkview.c.o  -o ../bin/freenect-chunkview -Wl,-rpath,/home/matthew/build_ws/src/dep/libfreenect/build/lib: ../lib/libfreenect.so.0.6.0 -lGL -lGLU -lglut -lXmu -lXi -lpthread -lm -lusb-1.0 

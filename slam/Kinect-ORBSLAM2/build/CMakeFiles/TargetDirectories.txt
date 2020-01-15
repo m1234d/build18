@@ -1,4 +1,0 @@
-/home/matthew/build_ws/src/slam/Kinect-ORBSLAM2/build/CMakeFiles/rebuild_cache.dir
-/home/matthew/build_ws/src/slam/Kinect-ORBSLAM2/build/CMakeFiles/edit_cache.dir
-/home/matthew/build_ws/src/slam/Kinect-ORBSLAM2/build/CMakeFiles/ORB_SLAM2.dir
-/home/matthew/build_ws/src/slam/Kinect-ORBSLAM2/build/CMakeFiles/rgbd_kinect_freenect.dir
