@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>whac_gazebo</name>
+  <version>0.0.0</version>
+  <description>The gazebo package</description>
+
+  <maintainer email="tscherli@andrew.cmu.edu">Tom Scherlis</maintainer>
+  <author email="tscherli@andrew.cmu.edu">Tom Scherlis</author>
+
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>gazebo_ros</depend>
+  <depend>whac_description</depend>
+
+  <export>
+    <gazebo_ros gazebo_model_path="${prefix}/models"/>
+    <gazebo_ros gazebo_media_path="${prefix}/worlds"/>
+  </export>
+</package>

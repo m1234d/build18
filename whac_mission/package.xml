@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>whac_drivers</name>
+  <name>whac_mission</name>
   <version>0.0.0</version>
-  <description>The drivers package</description>
+  <description>The mission package</description>
 
   <maintainer email="tscherli@andrew.cmu.edu">Tom Scherlis</maintainer>
   <author email="tscherli@andrew.cmu.edu">Tom Scherlis</author>
@@ -17,7 +17,10 @@
   <depend>sensor_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>tf</depend>
-  <depend>roboclaw_node</depend>
+  <depend>whac_gazebo</depend>
+  <depend>whac_drivers</depend>
+  <depend>whac_motion</depend>
+  <depend>whac_description</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

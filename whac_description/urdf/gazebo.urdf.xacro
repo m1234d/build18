@@ -7,19 +7,20 @@
 
     <xacro:macro name="whac_sim_laser">
         <gazebo reference="laser">
-            <sensor type="gpu_ray" name="head_rplidar_sensor">
+            <sensor type="ray" name="head_rplidar_sensor">
                 <pose>0 0 0 0 0 0</pose>
                 <visualize>false</visualize>
                 <update_rate>40</update_rate>
                 <ray>
                     <scan>
                         <horizontal>
-                            <samples>720</samples>
+                            <samples>360</samples>
                             <resolution>1</resolution>
                             <min_angle>-3.14159265</min_angle>
                             <max_angle>3.14159265</max_angle>
                         </horizontal>
                     </scan>
+                    <updateRate>10.0</updateRate>
                     <range>
                         <min>0.2</min>
                         <max>30.0</max>
@@ -31,7 +32,7 @@
                         <stddev>0.01</stddev>
                     </noise>
                 </ray>
-                <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_gpu_laser.so">
+                <plugin name="gazebo_ros_head_rplidar_controller" filename="libgazebo_ros_laser.so">
                     <topicName>scan</topicName>
                     <frameName>laser</frameName>
                 </plugin>
@@ -41,23 +42,20 @@
 
     <xacro:macro name="whac_sim_create">
         <gazebo>
-            <gazebo>
-                <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
-                    <updateRate>100.0</updateRate>
-                    <robotNamespace>/</robotNamespace>
-                    <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
-                    <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
-                    <leftRearJoint>back_left_wheel_joint</leftRearJoint>
-                    <rightRearJoint>back_right_wheel_joint</rightRearJoint>
-                    <wheelSeparation>0.44</wheelSeparation>
-                    <wheelDiameter>0.215</wheelDiameter>
-                    <robotBaseFrame>base_link</robotBaseFrame>
-                    <torque>20</torque>
-                    <topicName>cmd_vel</topicName>
-                    <broadcastTF>false</broadcastTF>
-                </plugin>
-            </gazebo>
-
+            <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
+                <updateRate>100.0</updateRate>
+                <robotNamespace>/</robotNamespace>
+                <leftFrontJoint>front_left_wheel_joint</leftFrontJoint>
+                <rightFrontJoint>front_right_wheel_joint</rightFrontJoint>
+                <leftRearJoint>back_left_wheel_joint</leftRearJoint>
+                <rightRearJoint>back_right_wheel_joint</rightRearJoint>
+                <wheelSeparation>0.44</wheelSeparation>
+                <wheelDiameter>0.215</wheelDiameter>
+                <robotBaseFrame>base_link</robotBaseFrame>
+                <torque>20</torque>
+                <topicName>/cmd_vel</topicName>
+                <broadcastTF>false</broadcastTF>
+            </plugin>
         </gazebo>
     </xacro:macro>
 
