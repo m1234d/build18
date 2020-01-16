@@ -1,0 +1,9 @@
+sampling_planner:
+  bubbleRadius: 0.3
+  wheelbaseWidth: 0.44
+  maxSpeed: 0.5
+  maxAngle: 0.5
+  horizonTime: 2.0
+  numTrajectories: 7
+  numPts: 10
+  frequency: 5

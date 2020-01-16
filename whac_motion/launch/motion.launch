@@ -1,0 +1,4 @@
+<launch>
+    <rosparam file="$(find whac_motion)/motion_params.yaml"/>
+    <node pkg="whac_motion" type="sampling_planner" name="sampling_planner" output="screen"/>
+</launch>
