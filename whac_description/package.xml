@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>whac_motion</name>
+  <name>whac_description</name>
   <version>0.0.0</version>
-  <description>The motion package</description>
+  <description>The description package</description>
 
   <maintainer email="tscherli@andrew.cmu.edu">Tom Scherlis</maintainer>
   <author email="tscherli@andrew.cmu.edu">Tom Scherlis</author>
@@ -18,6 +18,8 @@
   <depend>geometry_msgs</depend>
   <depend>tf</depend>
   <depend>nav_msgs</depend>
+  <depend>gazebo_ros</depend>
+  <depend>xacro</depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(whac_motion)
+project(whac_description)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -15,10 +15,9 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   geometry_msgs
   tf
+  gazebo_ros
+  xacro
   )
-
-catkin_python_setup()
-
 
 catkin_package(CATKIN_DEPENDS
   message_runtime
@@ -28,4 +27,6 @@ catkin_package(CATKIN_DEPENDS
   sensor_msgs
   geometry_msgs
   tf
+  gazebo_ros
+  xacro
   )

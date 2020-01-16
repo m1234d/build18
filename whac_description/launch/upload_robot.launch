@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="urdf_file" default="$(find xacro)/xacro.py '$(find whac_description)/robots/whac.urdf.xacro'" />
+  <param name="robot_description" command="$(arg urdf_file)" />
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" respawn="false" output="screen"/>
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="20.0" />
+    <param name="tf_prefix" type="string" value="" />
+  </node>
+    
+</launch>

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>whac_motion</name>
+  <name>whac_lidar</name>
   <version>0.0.0</version>
-  <description>The motion package</description>
+  <description>The lidar package</description>
 
   <maintainer email="tscherli@andrew.cmu.edu">Tom Scherlis</maintainer>
   <author email="tscherli@andrew.cmu.edu">Tom Scherlis</author>

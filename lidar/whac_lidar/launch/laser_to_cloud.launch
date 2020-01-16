@@ -1,0 +1,3 @@
+<launch>
+    <node pkg="whac_lidar" type="laser_to_cloud" name="laser_to_cloud"/>
+</launch>

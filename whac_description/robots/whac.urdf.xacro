@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<robot name="btb"  
+       xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+       xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+       xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+       xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find whac_description)/urdf/body.urdf.xacro" />
+  <xacro:include filename="$(find whac_description)/urdf/constants.xacro" />
+  <xacro:include filename="$(find whac_description)/urdf/gazebo.urdf.xacro" />
+
+  <gazebo>
+     
+     <!--controller:gazebo_ros_controller_manager name="gazebo_ros_controller_manager" plugin="libgazebo_ros_controller_manager.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>1000.0</updateRate>
+          <robotNamespace>dynamixel</robotNamespace>
+          <robotParam>robot_description</robotParam>
+          <interface:audio name="gazebo_ros_controller_manager_dummy_iface" />
+     </controller:gazebo_ros_controller_manager-->
+     
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/dynamixel</robotNamespace>
+    </plugin>
+     
+     
+  </gazebo>
+
+  <!-- Body of TurtleBot, with plates, standoffs and Create (including sim sensors) -->
+  <turtlebot_body/>
+
+</robot>
