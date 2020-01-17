@@ -18,6 +18,8 @@
   <depend>geometry_msgs</depend>
   <depend>tf</depend>
   <depend>nav_msgs</depend>
+  <depend>tf2_sensor_msgs</depend>
+
 
 
   <!-- The export tag contains other, unspecified, tags -->

@@ -3,17 +3,20 @@
 
 
 
-    <!-- If simulated, upload the vehicle model and the environment model  -->
     <group if="$(arg simulated)">
+        <!-- Comment this line out if you want to use SLAM in the simulator: -->
+        <node pkg="tf" type="static_transform_publisher" name="gt_linker" args="0 0 0 0 0 0 /world /odom 100"/>    </group>
+        <node name="odom_to_tf" pkg="message_to_tf" type="message_to_tf" args="/ground_truth/state"/>
         <include file="$(find whac_gazebo)/launch/simple_walls.launch"/>
-    </group>
 
-    <!-- if not simulated, upload the vehicle model and start multimaster  -->
+
     <group unless="$(arg simulated)">
         <include file="$(find whac_description)/launch/upload_robot.launch"/>
         <!--<include file="$(find whac_drivers)/launch/$(arg model_name)_vehicle.launch"/>-->
     </group>
-    
-    <include file="$(find whac_motion)/launch/motion.launch"/>
+
+    <include file="$(find whac_lidar)/launch/laser_to_cloud.launch"/>
+
+    <!--<include file="$(find whac_motion)/launch/motion.launch"/>-->
 
 </launch>

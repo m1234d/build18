@@ -1,11 +1,11 @@
 sampling_planner:
   bubbleRadius: 0.3
   wheelbaseWidth: 0.44
-  maxSpeed: 0.25
-  maxAngle: 0.25
-  horizonTime: 4.0
-  numTrajectories: 7
-  numPts: 10
+  maxSpeed: 0.4
+  maxAngle: 0.2
+  horizonTime: 2.0
+  numTrajectories: 11
+  numPts: 7
   frequency: 5
-  carrotDist: 2
+  carrotDist: 0.7
   maxWaitBeforeReplan: 15

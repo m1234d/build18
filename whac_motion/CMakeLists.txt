@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   geometry_msgs
   tf
+  tf2_sensor_msgs
   )
 
 catkin_python_setup()
@@ -28,4 +29,5 @@ catkin_package(CATKIN_DEPENDS
   sensor_msgs
   geometry_msgs
   tf
+  tf2_sensor_msgs
   )

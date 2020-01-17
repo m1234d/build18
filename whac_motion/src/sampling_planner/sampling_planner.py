@@ -1,13 +1,16 @@
 import rospy
 from std_msgs.msg import String, Bool, Header
 from nav_msgs.msg import Path
-from geometry_msgs.msg import Pose, PoseStamped, Quaternion, Point, Twist, TwistStamped, Vector3
+from geometry_msgs.msg import Pose, PoseStamped, Quaternion, Point, PointStamped, Twist, TwistStamped, Vector3
 from sensor_msgs.msg import PointCloud2
 from collections import namedtuple
 import numpy as np
 from math import sin, cos
-import tf
+import tf2_ros as tf2
 import sensor_msgs.point_cloud2 as pc2
+import tf2_sensor_msgs.tf2_sensor_msgs as tf2sm
+import tf
+
 
 class SamplingPlanner:
     def __init__(self):
@@ -36,6 +39,11 @@ class SamplingPlanner:
             frequency=rospy.get_param("~frequency")
         )
 
+        self.cloudTopic = rospy.get_param('~cloud_topic', 'cloud')
+
+        self.tfb = tf2.Buffer()
+        self.tfl = tf2.TransformListener(self.tfb)
+
         self.x = [0, 0, 0]
         self.obstacles = [[1., 0.]]
         self.waypoints = [[0., 0.], [2., 1.], [3., 4.], [2., 6.], [0., 6.]]
@@ -50,11 +58,12 @@ class SamplingPlanner:
 
         self.trajPubs = []
         for i in range(self.params.numTrajectories):
-            self.trajPubs.append(rospy.Publisher("traj_candidate{}".format(i), Path, queue_size=10))
+            self.trajPubs.append(rospy.Publisher("traj_candidates/traj_{}".format(i), Path, queue_size=10))
 
         self.localPlanPub = rospy.Publisher("local_plan", Path, queue_size=10)
         self.globalPlanPub = rospy.Publisher("global_plan", Path, queue_size=10)
         self.cmdVelPub = rospy.Publisher("cmd_vel", Twist, queue_size=10)
+        self.carrotPub = rospy.Publisher("carrot_pos", PointStamped, queue_size=10)
 
         self.obstacleSub = rospy.Subscriber(self.cloudTopic, PointCloud2, self.updateObstacles)
 
@@ -93,7 +102,7 @@ class SamplingPlanner:
             traj = trajectories[i]
             input = inputs[i]
             cull = False
-            for pt in traj:
+            for pt in traj[self.params.numPts/3:self.params.numPts]:
                 dists = [(o[0] - pt[0]) ** 2 + (o[1] - pt[1]) ** 2 for o in obstacles]
                 if min(dists) < threshold:
                     cull = True
@@ -149,10 +158,16 @@ class SamplingPlanner:
     def update(self, timerEvent):
 
         # Update Robot State:
-        (pos, q) = self.tfl.lookupTransform(self.odom_frame, self.base_frame, rospy.Time(0))
-        rpy = tf.transformations.euler_from_quaternion(q)
-        self.x[0] = pos[0]
-        self.x[1] = pos[1]
+        try:
+            trans = self.tfb.lookup_transform(self.odom_frame, self.base_frame, rospy.Time(0))
+        except:
+            rospy.logwarn("Error looking up transform!")
+            return
+        q = trans.transform.rotation
+        rpy = tf.transformations.euler_from_quaternion((q.x, q.y, q.z, q.w))
+        pos = trans.transform.translation
+        self.x[0] = pos.x
+        self.x[1] = pos.y
         self.x[2] = rpy[2]
 
         # Compute trajectories and cull colliding paths:
@@ -174,15 +189,22 @@ class SamplingPlanner:
 
         # Publish results
         self.localPlanPub.publish(traj2path(trajectories[best]))
+        self.globalPlanPub.publish(traj2path(self.waypoints))
+        self.carrotPub.publish(pt2point(self.cx))
         self.cmdVelPub.publish(input2twist(inputs[best]))
 
     def publishTrajectories(self, trajectories):
         for i in range(len(trajectories)):
             self.trajPubs[i].publish(traj2path(trajectories[i]))
 
-    def laserCallback(self, cloud):
+    def updateObstacles(self, cloud):
         # Transform to odom frame:
-        cloud = tf.TransfomerRos.transformPointCloud(self.odom_frame, cloud)
+        try:
+            trans = self.tfb.lookup_transform(self.odom_frame, cloud.header.frame_id, rospy.Time(0))
+        except:
+            rospy.logwarn("Error looking up transform!")
+            return
+        cloud = tf2sm.do_transform_cloud(cloud, trans)
 
         # Extract obstacle locations:
         self.obstacles = pc2.read_points_list(cloud, field_names=["x", "y"], skip_nans=True)
@@ -207,8 +229,9 @@ def traj2path(trajectory):
         p.header = h
         p.pose = Pose()
         p.pose.position = Point(pt[0], pt[1], 0)
-        q = tf.transformations.quaternion_from_euler(0, 0, pt[2])
-        p.pose.orientation = Quaternion(q[0], q[1], q[2], q[3])
+        if len(pt) == 3:
+            q = tf.transformations.quaternion_from_euler(0, 0, pt[2])
+            p.pose.orientation = Quaternion(q[0], q[1], q[2], q[3])
         path.poses.append(p)
     return path
 
@@ -219,6 +242,16 @@ def input2twist(input):
     twist.angular = Vector3(0, 0, input[1])
     return twist
 
+def pt2point(input):
+    p = PointStamped()
+    p.header = Header()
+    p.header.stamp = rospy.Time.now()
+    p.header.frame_id = 'odom'
+    p.point = Point()
+    p.point.x = input[0]
+    p.point.y = input[1]
+    p.point.z = 0
+    return p
 
 def main():
     rospy.init_node('sampling_planner')
