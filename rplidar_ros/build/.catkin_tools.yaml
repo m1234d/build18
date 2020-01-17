@@ -1,0 +1,6 @@
+devel_space: /ssd/rplidar_ros/devel
+install: false
+install_space: /ssd/rplidar_ros/install
+profile: default
+source_space: /ssd/rplidar_ros/src
+workspace: /ssd/rplidar_ros
